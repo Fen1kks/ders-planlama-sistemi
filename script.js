@@ -932,11 +932,13 @@ function drawArrows() {
       
       let strokeColor = generateStableColor(prereqId);
       let baseOpacity = "0.9";
+      let strokeWidth = "3";
       
       if (isWeak) {
-          path.setAttribute("stroke-dasharray", "1,5"); // Dotted
+          path.setAttribute("stroke-dasharray", "0, 8"); // Wide round dots
           path.setAttribute("stroke-linecap", "round");
-          baseOpacity = isPrereqCompleted ? "0.9" : "0.5";
+          strokeWidth = "5"; // Thicker for visibility
+          baseOpacity = "0.85";
       } else if (!isPrereqCompleted) {
         path.setAttribute("stroke-dasharray", "5,5");
         baseOpacity = "0.5";
@@ -946,7 +948,7 @@ function drawArrows() {
       path.setAttribute("data-base-opacity", baseOpacity);
 
       path.setAttribute("stroke", strokeColor);
-      path.setAttribute("stroke-width", "3");
+      path.setAttribute("stroke-width", strokeWidth);
       path.setAttribute("data-original-color", strokeColor);
       
       svg.appendChild(path);
