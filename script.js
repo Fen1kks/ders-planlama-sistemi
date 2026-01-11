@@ -646,8 +646,9 @@ function drawArrows() {
       // Responsive constraints for mobile tightness
       const collisionStartOffset = window.innerWidth <= 900 ? 20 : 60;
       const collisionEndOffset = window.innerWidth <= 900 ? 20 : 40;
+      const longArrowThreshold = window.innerWidth <= 900 ? 100 : 250;
 
-      if (gap > 250) {
+      if (gap > longArrowThreshold) {
           const blockStart = sourceX + collisionStartOffset;
           const blockEnd = targetX - collisionEndOffset;
           
@@ -683,8 +684,13 @@ function drawArrows() {
       const arrows = verticalLanes[key];
       arrows.sort((a, b) => ((a.sourceY + a.targetY) / 2) - ((b.sourceY + b.targetY) / 2));
       const count = arrows.length;
-      const availableWidth = 24; 
-      const step = Math.min(12, availableWidth / count); 
+      
+      // Responsive constraints for packing lines
+      const isMobile = window.innerWidth <= 900;
+      const availableWidth = isMobile ? 16 : 24; 
+      const maxStep = isMobile ? 4 : 12; 
+      
+      const step = Math.min(maxStep, availableWidth / count); 
       arrows.forEach((arrow, index) => {
           gutterAssignments[arrow.id] = (index - (count - 1) / 2) * step;
       });
@@ -709,13 +715,15 @@ function drawArrows() {
        const channelOffset = gutterAssignments[id] || 0;
        const gapOffset = gapAssignments[id] || 0;
        
-       // Responsive Gutter Base
-       const gutterBase = window.innerWidth <= 900 ? 12 : 32;
+       // Responsive Gutter Base & Thresholds
+       const isMobile = window.innerWidth <= 900;
+       const gutterBase = isMobile ? 10 : 32;
+       const longArrowThreshold = isMobile ? 100 : 250; // Lower threshold to detect column skips on mobile
+       const r = isMobile ? 4 : 8; // Tighter radius on mobile
 
        let d = "";
-       const r = 8; 
        
-       if (gap > 250) {
+       if (gap > longArrowThreshold) {
            const crossY = hopY + gapOffset;
            const gutterX1 = sourceX + gutterBase + channelOffset; 
            const gutterX2 = targetX - gutterBase - channelOffset; 
