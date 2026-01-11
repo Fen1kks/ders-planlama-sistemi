@@ -193,6 +193,12 @@ body {
   align-items: center; 
 }
 
+.controls-group {
+    display: flex;
+    gap: 0.25rem; /* Very close together */
+    align-items: center;
+}
+
 .metric-card {
   display: flex;
   flex-direction: column;
