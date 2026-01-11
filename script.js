@@ -1077,6 +1077,11 @@ document.addEventListener('click', (e) => {
             render();
             calculateMetrics();
             
+            // Force redraw arrows after DOM update
+            setTimeout(() => {
+                scheduleDrawArrows();
+            }, 50);
+            
             console.log("Data cleared successfully");
         } catch (err) {
             console.error("Reset failed:", err);
