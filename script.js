@@ -1050,31 +1050,36 @@ window.addEventListener('load', () => {
 });
 
 // Setup Global Listeners
-document.addEventListener('DOMContentLoaded', () => {
+// Setup Global Listeners (Event Delegation)
+document.addEventListener('click', (e) => {
     // Reset Button Logic
-    const resetBtn = document.getElementById("reset-btn");
-    console.log("Reset button found:", resetBtn);
+    const resetBtn = e.target.closest("#reset-btn");
     
     if (resetBtn) {
-        resetBtn.addEventListener("click", (e) => {
-            e.preventDefault(); // Prevent any default form submission if applicable
-            console.log("Reset button clicked");
-            
-            if (confirm("Are you sure you want to reset ALL data? This cannot be undone.")) {
-                try {
-                    // Clear all department states
-                    Object.keys(localStorage).forEach(key => {
-                        if (key.startsWith("gpaState_")) {
-                            localStorage.removeItem(key);
-                        }
-                    });
-                    console.log("Data cleared");
-                    window.location.reload();
-                } catch (err) {
-                    console.error("Reset failed:", err);
-                    alert("Error resetting data. Check console.");
+        e.preventDefault();
+        e.stopPropagation();
+        console.log("Reset button clicked (delegated)");
+        
+        if (confirm("Are you sure you want to reset ALL data? This cannot be undone.")) {
+            try {
+                // Clear all department states
+                Object.keys(localStorage).forEach(key => {
+                    if (key.startsWith("gpaState_")) {
+                        localStorage.removeItem(key);
+                        console.log(`Cleared: ${key}`);
+                    }
+                });
+                // Also legacy key just in case
+                if (localStorage.getItem("courseState")) {
+                     localStorage.removeItem("courseState");
                 }
+                
+                console.log("Data cleared");
+                window.location.reload();
+            } catch (err) {
+                console.error("Reset failed:", err);
+                alert("Error resetting data: " + err.message);
             }
-        });
+        }
     }
 });
