@@ -510,7 +510,7 @@ function findBestYGap(collisionRegions, targetY, minY, maxY) {
         const gapEnd = next.y1;
         const gapSize = gapEnd - gapStart;
 
-        if (gapSize > 15) { 
+        if (gapSize > 5) { // Threshold reduced from 15 for tighter mobile spacing
             const gapCenter = gapStart + gapSize / 2;
             const dist = Math.abs(gapCenter - targetY);
             if (dist < minDist) {
@@ -650,7 +650,8 @@ function drawArrows() {
           const collisions = getCollisionRegions(blockStart, blockEnd, cardCache);
           const gridHeight = scrollHeight;
           
-          const searchMinY = Math.max(sourceY, targetY) + 60;
+          // Expand search range: start slightly above and go to bottom
+          const searchMinY = Math.min(sourceY, targetY) - 40; 
           const searchMaxY = gridHeight; 
           
           const bestY = findBestYGap(collisions, targetY, searchMinY, searchMaxY);
@@ -759,7 +760,8 @@ function drawArrows() {
       path.setAttribute("data-base-opacity", baseOpacity);
 
       path.setAttribute("stroke", strokeColor);
-      path.setAttribute("stroke-width", "3");
+      const strokeWidth = window.innerWidth <= 900 ? "0.8" : "3";
+      path.setAttribute("stroke-width", strokeWidth);
       path.setAttribute("data-original-color", strokeColor);
       
       svg.appendChild(path);
@@ -802,7 +804,8 @@ function drawArrows() {
                  path.setAttribute("data-d-long", dLong);
 
                  path.setAttribute("stroke", pairColor);
-                 path.setAttribute("stroke-width", "3");
+                 const strokeWidth = window.innerWidth <= 900 ? "0.8" : "3";
+                 path.setAttribute("stroke-width", strokeWidth);
                  
                  let baseOpacity = "0.9";
                  if (isPairLocked) {
