@@ -898,36 +898,30 @@ function drawArrows() {
          const targetMetrics = cardCache.get(coreqId);
          if (!targetMetrics) return;
 
-             // Draw two parallel lines in the gutter (Right Side) to avoid cutting through middle cards
-             // Increased offset to 18px (mobile) to allow straight line before turn
-             const gutterX = sourceMetrics.x + sourceMetrics.w + (window.innerWidth <= 900 ? 18 : 20);
-             const r = 8; 
-             
-             // Bracket style path
-             // Start from Center-Right of Source
-             // Curve to Vertical Line
-             // Go down/up to Target Center-Right
-             
-             const ySource = sourceMetrics.cy;
-             const yTarget = targetMetrics.cy;
-             const cardRight = sourceMetrics.x + sourceMetrics.w;
+              // Connection Points: Bottom Center
+              const xSource = sourceMetrics.x + sourceMetrics.w / 2;
+              const ySource = sourceMetrics.y + sourceMetrics.h;
+              const xTarget = targetMetrics.x + targetMetrics.w / 2;
+              const yTarget = targetMetrics.y + targetMetrics.h;
+              
+              // Draw U-shape connecting the bottoms
+              // Go down below the lowest card
+              const yLoop = Math.max(ySource, yTarget) + 20;
 
-             // Parallel wires
-             const offsets = [-3, 3]; 
+              // Parallel wires
+              const offsets = [-3, 3]; 
 
-             const pairColor = generateStableColor(course.id + coreqId);
-             const isPairLocked = isLocked(course.id, false) || isLocked(coreqId, false);
+              const pairColor = generateStableColor(course.id + coreqId);
+              const isPairLocked = isLocked(course.id, false) || isLocked(coreqId, false);
 
-             offsets.forEach(off => {
-                 const currentGutter = gutterX + off;
-                 
-                  // Path: Start (Card Right Edge) -> Line to Gutter -> Vertical -> Line to Target (Card Right Edge)
-                  const d = `M ${cardRight} ${ySource} ` +
-                           `L ${currentGutter - r} ${ySource} ` +
-                           `Q ${currentGutter} ${ySource} ${currentGutter} ${ySource + r * (yTarget > ySource ? 1 : -1)} ` +
-                           `L ${currentGutter} ${yTarget - r * (yTarget > ySource ? 1 : -1)} ` +
-                           `Q ${currentGutter} ${yTarget} ${currentGutter - r} ${yTarget} ` +
-                           `L ${cardRight} ${yTarget}`;
+              offsets.forEach(off => {
+                   
+                   // Path: Start(Bottom) -> Down -> Horizontal -> Up -> Target(Bottom)
+                   // Nested U-shapes via offset
+                   const d = `M ${xSource + off} ${ySource} ` +
+                             `L ${xSource + off} ${yLoop + off} ` +
+                             `L ${xTarget + off} ${yLoop + off} ` +
+                             `L ${xTarget + off} ${yTarget}`;
 
                  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
                  path.setAttribute("d", d); 
