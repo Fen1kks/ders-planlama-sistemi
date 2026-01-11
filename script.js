@@ -1063,10 +1063,11 @@ document.addEventListener('click', (e) => {
         if (confirm("Are you sure you want to reset ALL data? This cannot be undone.")) {
             try {
                 // Clear all department states
+                let clearedCount = 0;
                 Object.keys(localStorage).forEach(key => {
                     if (key.startsWith("gpaState_")) {
                         localStorage.removeItem(key);
-                        console.log(`Cleared: ${key}`);
+                        clearedCount++;
                     }
                 });
                 // Also legacy key just in case
@@ -1074,11 +1075,11 @@ document.addEventListener('click', (e) => {
                      localStorage.removeItem("courseState");
                 }
                 
-                console.log("Data cleared");
+                alert(`Veriler başarıyla temizlendi.`);
                 window.location.reload();
             } catch (err) {
                 console.error("Reset failed:", err);
-                alert("Error resetting data: " + err.message);
+                alert("Hata: " + err.message);
             }
         }
     }
