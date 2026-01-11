@@ -486,6 +486,7 @@ body {
   .course-name {
       font-size: 0.65rem; /* Smaller Course Name */
       line-height: 1.1;
+      padding-top: 0.2rem; /* Move text down slightly */
   }
   
   .course-credits {
