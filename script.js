@@ -933,14 +933,25 @@ function drawArrows() {
       const prereqState = state[prereqId];
       const isPrereqCompleted = prereqState && prereqState.completed && prereqState.grade !== "FF";
       
+      // Check for Co-req overlap to sync colors
+      const course = curriculum.find(c => c.id === courseId);
+      const isCoreq = course && course.coreqs && course.coreqs.includes(prereqId);
+      
       let strokeColor = generateStableColor(prereqId);
+      
+      if (isCoreq) {
+          const id1 = courseId < prereqId ? courseId : prereqId;
+          const id2 = courseId < prereqId ? prereqId : courseId;
+          strokeColor = generateStableColor(id1 + id2);
+      }
+
       let baseOpacity = "0.9";
       let strokeWidth = "3";
       
       if (isWeak) {
-          path.setAttribute("stroke-dasharray", "0, 8"); // Wide round dots
+          path.setAttribute("stroke-dasharray", "0, 7"); // Slightly wider gap for cleanness
           path.setAttribute("stroke-linecap", "round");
-          strokeWidth = "5"; // Thicker for visibility
+          strokeWidth = "4"; // Reduced from 5
           baseOpacity = "0.85";
       } else if (!isPrereqCompleted) {
         path.setAttribute("stroke-dasharray", "5,5");
