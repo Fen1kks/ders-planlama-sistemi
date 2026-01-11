@@ -1006,33 +1006,47 @@ function drawArrows() {
          // Parallel wires
          const offsets = [-3, 3]; 
 
-              const pairColor = generateStableColor(course.id + coreqId);
-              const isPairLocked = isLocked(course.id, false) || isLocked(coreqId, false);
+               const pairColor = generateStableColor(course.id + coreqId);
+               const isPairLocked = isLocked(course.id, false) || isLocked(coreqId, false);
 
-              offsets.forEach(off => {
-                   
-                   // Path: Direct Vertical Line
-                   const d = `M ${xSource + off} ${ySource} ` +
-                             `L ${xTarget + off} ${yTarget}`;
+               // Check completion status for dash logic
+               const c1State = state[course.id];
+               const c2State = state[coreqId];
+               const isC1Done = c1State && c1State.completed && c1State.grade !== "FF";
+               const isC2Done = c2State && c2State.completed && c2State.grade !== "FF";
+               const isPairCompleted = isC1Done && isC2Done;
 
-                 const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-                 path.setAttribute("d", d); 
-                 path.setAttribute("fill", "none"); 
+               offsets.forEach(off => {
+                    
+                    // Path: Direct Vertical Line
+                    const d = `M ${xSource + off} ${ySource} ` +
+                              `L ${xTarget + off} ${yTarget}`;
 
-                 path.setAttribute("stroke", pairColor);
-                 let strokeWidth = window.innerWidth <= 900 ? "0.8" : "3";
-                 
-                 let baseOpacity = "0.9";
-                 
-                 if (isWeak) { // Weak Co-req Styling
-                     path.setAttribute("stroke-dasharray", "0, 7"); 
-                     path.setAttribute("stroke-linecap", "round");
-                     strokeWidth = "4"; 
-                     baseOpacity = isPairLocked ? "0.5" : "0.85";
-                 } else if (isPairLocked) {
-                     path.setAttribute("stroke-dasharray", "4,4");
-                     baseOpacity = "0.5";
-                 }
+                  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                  path.setAttribute("d", d); 
+                  path.setAttribute("fill", "none"); 
+
+                  path.setAttribute("stroke", pairColor);
+                  let strokeWidth = window.innerWidth <= 900 ? "0.8" : "3";
+                  
+                  let baseOpacity = "0.9";
+                  
+                  if (isWeak) { // Weak Co-req Styling
+                      path.setAttribute("stroke-dasharray", "0, 7"); 
+                      path.setAttribute("stroke-linecap", "round");
+                      strokeWidth = "4"; 
+                      baseOpacity = isPairLocked ? "0.5" : "0.85";
+                  } else {
+                      // Standard Co-req Logic
+                      if (isPairLocked) {
+                          path.setAttribute("stroke-dasharray", "4,4");
+                          baseOpacity = "0.5";
+                      } else if (!isPairCompleted) {
+                          // Unlocked but not taken -> Dashed
+                          path.setAttribute("stroke-dasharray", "4,4");
+                          baseOpacity = "0.9";
+                      }
+                  }
 
                  path.setAttribute("stroke-width", strokeWidth);
                  path.style.opacity = baseOpacity;
