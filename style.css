@@ -463,11 +463,11 @@ body {
   }
 
   .course-card + .course-card {
-    margin-top: 1rem;
+    margin-top: 1.5rem; /* Increased from 1rem */
   }
   
   .term-column {
-    gap: 0.5rem;
+    gap: 1rem; /* Increased from 0.5rem */
   }
 
   /* Miniature Card Styling for Mobile */
