@@ -351,7 +351,11 @@ function createCard(course) {
   
   if (creditReq) {
       const num = creditReq.match(/\d+/)[0];
-      creditDisplay = `Req: ${num}<br>Credits`;
+      if (course.credits > 0) {
+          creditDisplay = `${course.credits} Cr | Req: ${num}`;
+      } else {
+          creditDisplay = `Req: ${num}<br>Credits`;
+      }
   }
 
   // Interactive Logic
