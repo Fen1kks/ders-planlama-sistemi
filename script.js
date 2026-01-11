@@ -88,7 +88,10 @@ function loadDepartment(code) {
     // Clean Data (Filter unknown prereqs - Scoped to this dept + Allow Credit Reqs)
     const allIds = new Set(curriculum.map((c) => c.id));
     curriculum.forEach((c) => {
-      c.prereqs = c.prereqs.filter((p) => allIds.has(p) || /^\d+\s+Credits?$/i.test(p));
+      c.prereqs = c.prereqs.filter((p) => {
+          const cleanId = p.replace("!", "");
+          return allIds.has(cleanId) || /^\d+\s+Credits?$/i.test(p);
+      });
     });
 
     // Load State for this Department
