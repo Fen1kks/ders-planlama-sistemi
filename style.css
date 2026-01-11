@@ -1,0 +1,662 @@
+/* =========================================================================
+   1. VARIABLES & THEME CONFIGURATION
+   ========================================================================= */
+:root {
+  /* Premium HSL Color Palette - Engineering & Academic Tone */
+  --hue-primary: 215;
+  --hue-success: 150;
+  --hue-warning: 35;
+  --hue-danger: 0;
+  --hue-neutral: 220;
+
+  --c-bg: hsl(var(--hue-neutral), 20%, 97%);
+  --c-surface: #ffffff;
+  --c-surface-border: #e2e8f0;
+  --c-text-main: hsl(var(--hue-neutral), 40%, 15%);
+  --c-text-muted: hsl(var(--hue-neutral), 20%, 50%);
+
+  --c-primary: hsl(var(--hue-primary), 90%, 45%);
+  --c-primary-light: hsl(var(--hue-primary), 80%, 92%);
+
+  --c-success: hsl(var(--hue-success), 70%, 40%);
+  --c-locked: hsl(var(--hue-neutral), 15%, 90%);
+
+  --shadow-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.05);
+  --shadow-hover: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+
+  --radius-md: 12px;
+  --radius-sm: 8px;
+
+  --anim-speed: 0.3s;
+}
+
+[data-theme="dark"] {
+  /* Tokyo Night Theme Palette */
+  --hue-primary: 220; 
+  
+  --c-bg: #1a1b26; 
+  --c-surface: #24283b; 
+  --c-surface-border: #414868; 
+  
+  --c-text-main: #c0caf5; 
+  --c-text-muted: #565f89; 
+  --c-text-primary: #15161e; 
+  
+  --c-primary: #7aa2f7; 
+  --c-primary-light: #2f334d; 
+  
+  --c-success: #9ece6a; 
+  --c-danger: #f7768e; 
+  --hue-warning: 35; 
+  
+  --c-locked: #16161e; 
+  
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+}
+
+/* =========================================================================
+   2. GLOBAL RESET & BASE STYLES
+   ========================================================================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px; 
+}
+
+body {
+  background-color: var(--c-bg);
+  color: var(--c-text-main);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* Keep body hidden, scroll wrapper */
+}
+
+/* =========================================================================
+   3. HEADER & STATS BAR
+   ========================================================================= */
+.stats-bar {
+  background: var(--c-surface);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+  flex-shrink: 0; /* Prevent header shrinking */
+}
+
+/* Brand & Department Selector */
+.brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.department-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+
+.department-selector h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--c-text-main);
+  transition: color 0.2s;
+}
+
+.department-selector:hover h1 {
+  color: var(--c-primary);
+}
+
+.chevron-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--c-text-muted);
+  transition: transform 0.2s;
+}
+
+.department-selector:hover .chevron-icon {
+  color: var(--c-primary);
+}
+
+.department-selector.active .chevron-icon {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-md);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
+  min-width: 250px;
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.2s;
+  flex-direction: column;
+  display: flex;
+}
+
+.department-selector.active .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-item {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--c-text-main);
+  transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+  background: var(--c-bg);
+  color: var(--c-primary);
+}
+
+.dropdown-item.selected {
+  background: var(--c-primary);
+  color: white;
+}
+
+
+
+.brand span {
+  font-weight: 400;
+  color: var(--c-text-muted);
+  font-size: 0.9rem;
+}
+
+.metrics {
+  display: flex;
+  gap: 2rem;
+  align-items: center; 
+}
+
+.controls-group {
+    display: flex;
+    gap: 0.25rem; /* Very close together */
+    align-items: center;
+}
+
+.metric-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.metric-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--c-text-muted);
+  font-weight: 600;
+}
+
+.metric-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--c-text-main);
+  transition: color 0.3s ease;
+}
+
+/* Theme Toggle & Reset Button */
+.theme-toggle, .reset-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--c-text-main);
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.theme-toggle:hover, .reset-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+[data-theme="dark"] .theme-toggle:hover, [data-theme="dark"] .reset-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Reset Button Specifics */
+.reset-btn:hover {
+    color: #ef4444; 
+    background: rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Dark Mode Adjustment for Reset Button */
+[data-theme="dark"] .reset-btn:hover {
+    color: #fca5a5; /* Softer, Pastel Red */
+    background: rgba(127, 29, 29, 0.4) !important; /* Deep Red Background */
+}
+
+/* =========================================================================
+   4. LAYOUT & GRID
+   ========================================================================= */
+.grid-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: flex-start; 
+  justify-content: flex-start; /* Changed from center to start for scrolling */
+  overflow: auto; /* Enable scrolling */
+  position: relative;
+  background: var(--c-bg);
+  padding-top: 0; 
+  width: 100%; /* Ensure full width */
+}
+
+.curriculum-grid {
+  display: grid;
+  grid-template-columns: repeat(8, max-content);
+  gap: 0 4rem;
+  padding: 0 1rem 4rem 1rem;
+  position: relative; /* Anchor for absolute SVG arrows */
+  transform-origin: top center; 
+  transition: transform 0.2s ease-out;
+  margin: auto; /* Safe centering: centers if space exists, start-aligns if overflow */
+}
+
+/* Scrollbar Customization */
+.curriculum-grid::-webkit-scrollbar {
+  width: 8px;
+}
+.curriculum-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+.curriculum-grid::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.term-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; 
+  position: relative;
+  min-width: 0;
+  padding: 0;
+  border-right: none;
+  z-index: 2; /* Ensure columns (and cards) are above the SVG z-index */
+}
+
+.term-column:last-child {
+  border-right: none;
+}
+
+.term-header {
+  padding-bottom: 0.5rem;
+  padding-top: 1rem; 
+  gap: 0.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  border-bottom: 2px solid var(--c-surface-border); 
+  transition: border-color 0.2s ease;
+}
+.term-column:hover .term-header {
+  border-color: rgba(0, 0, 0, 0.05);
+}
+
+.term-year-badge {
+  font-size: 0.8rem;
+  padding: 4px 12px;
+}
+.term-name {
+  font-size: 1rem;
+}
+
+/* =========================================================================
+   5. COURSE CARDS
+   ========================================================================= */
+.course-card {
+  background: var(--c-surface);
+  border-radius: var(--radius-md);
+  padding: 0.5rem;
+  gap: 0.15rem; 
+  border-radius: 6px;
+  z-index: 2;
+  position: relative;
+  min-height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-left: 6px solid var(--grade-color, var(--c-surface-border)); 
+  transition: all 0.2s ease;
+}
+
+.course-card + .course-card {
+  margin-top: 2rem;
+}
+
+/* Interactability States */
+.course-card:not(.locked):hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.course-card.locked {
+  background: var(--c-locked);
+  color: var(--c-text-muted);
+  box-shadow: none;
+  border-color: transparent;
+}
+
+.course-card.locked .card-controls * {
+  pointer-events: none;
+}
+
+/* Dependency Highlight */
+.course-card.dependency-highlight {
+  opacity: 1 !important;
+  background: var(--c-surface) !important;
+  transform: translateY(-2px);
+  transition: all 0.2s ease;
+}
+
+/* Card Header Part */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.course-id {
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-color: var(--grade-color, var(--c-primary));
+  background: var(--grade-color, var(--c-primary));
+  color: var(--c-text-primary); 
+  padding: 1px 4px;
+  border-radius: 4px;
+  margin-bottom: 0;
+  font-size: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.course-name {
+  font-size: 0.8rem;
+  line-height: 1.2;
+  font-weight: 600;
+  white-space: normal;
+  overflow: hidden;
+}
+
+.prereq-hint {
+  display: none; 
+}
+
+/* State-based text coloring */
+.course-card.completed .course-id,
+.course-card.failed .course-id {
+  color: #fff;
+}
+[data-theme="dark"] .course-card.completed .course-id,
+[data-theme="dark"] .course-card.failed .course-id {
+  color: #000;
+}
+
+.locked-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--c-text-muted); 
+  opacity: 0.15; 
+  display: none;
+  pointer-events: none; 
+  z-index: 0; 
+}
+.course-card.locked .locked-icon {
+  display: block;
+}
+
+/* Special Case: Summer Practice */
+#card-ME400 {
+  border: 2px dashed var(--c-text-main);
+  border-left: 6px solid var(--grade-color, var(--c-text-muted));
+  opacity: 1 !important;
+}
+
+/* =========================================================================
+   6. CONTROLS (Checkbox & Select)
+   ========================================================================= */
+.card-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; 
+  margin-top: auto;
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+  padding-top: 0.4rem; 
+  gap: 0.75rem; 
+}
+
+/* Checkbox */
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+}
+.checkbox-wrapper input {
+  display: none;
+}
+.custom-checkbox {
+  width: 18px; 
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid var(--grade-color, #ddd);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  color: white;
+  font-size: 16px;
+}
+.checkbox-wrapper input:checked + .custom-checkbox {
+  background: var(--grade-color, var(--c-success));
+  border-color: var(--grade-color, var(--c-success));
+}
+.checkbox-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+[data-theme="dark"] .checkbox-wrapper input:checked + .custom-checkbox {
+  color: #000;
+}
+
+/* Dropdown */
+.grade-select {
+  border: 1px solid #eee;
+  border-radius: 4px; /* Reduced from var(--radius-sm) for sharper edges */
+  padding: 0.25rem 0.5rem;
+  font-size: 0.85rem;
+  outline: none;
+  background: transparent;
+  color: var(--c-text-main);
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+[data-theme="dark"] .grade-select {
+  background-color: var(--c-surface);
+  color: var(--c-text-main);
+}
+[data-theme="dark"] .grade-select option {
+  background-color: var(--c-surface);
+  color: var(--c-text-main);
+}
+.grade-select:hover {
+  border-color: var(--c-primary);
+}
+.grade-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =========================================================================
+   7. VISUALS & ARROWS
+   ========================================================================= */
+#arrows-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%; 
+  height: 100%;
+  pointer-events: none; 
+  z-index: 1; 
+  overflow: visible;
+}
+
+.arrow-path {
+  fill: none;
+  opacity: 0.8;
+  transition: opacity 0.3s, stroke-width 0.3s;
+}
+
+.arrow-path.active {
+  stroke: var(--c-primary);
+  opacity: 0.8;
+  stroke-width: 2;
+}
+
+.arrow-path.locked {
+  stroke: var(--hue-danger); 
+  stroke-dasharray: 4; 
+}
+
+/* =========================================================================
+   8. RESPONSIVE UTILITIES
+   ========================================================================= */
+/* Removed hiding arrows on mobile to allow scrolling usage */
+/* @media (max-width: 800px) { ... } */
+
+/* Tablet & Mobile Spacing Optimizations */
+@media (max-width: 900px) {
+  .curriculum-grid {
+    gap: 0 2rem; /* Reduce horizontal gap from 4rem to 2rem */
+    margin: 0; /* Reset vertical margin to prevent centering gap on mobile */
+  }
+
+  .course-card + .course-card {
+    margin-top: 1rem; /* Reduce vertical gap from 2rem to 1rem */
+  }
+  
+  .term-column {
+    gap: 0.5rem; /* Tighter column spacing */
+  }
+
+  /* Hide scrollbars on mobile/tablet for cleaner touch experience */
+  .grid-wrapper {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .grid-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .stats-bar {
+    padding: 2rem 1rem 0.5rem 1rem; /* Increased top padding for breathing room */
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem; /* Reduce gap between brand and metrics */
+    position: relative; /* Anchor for absolute toggle */
+  }
+  
+  .brand h1 {
+    font-size: 1rem;
+    padding-right: 2rem; /* Avoid overlap with toggle */
+  }
+  
+  .brand span {
+    font-size: 0.8rem;
+  }
+  
+  /* Pull toggle out of flow and place top-right */
+  .theme-toggle {
+    position: absolute;
+    top: 1.8rem; /* Aligned with the text */
+    right: 1rem;
+  }
+  
+  .metrics {
+    width: 100%;
+    justify-content: flex-end; /* Align credits and GPA together on the right */
+    gap: 1.5rem; /* Group them with space */
+  }
+  
+  .metric-value {
+    font-size: 1.2rem;
+  }
+  
+  .metric-label {
+    font-size: 0.65rem;
+  }
+}
+
+/* Attribution Footer */
+.attribution {
+  position: fixed;
+  bottom: 0.5rem;
+  right: 1rem;
+  font-size: 0.75rem;
+  color: var(--c-text-muted);
+  font-weight: 500;
+  z-index: 100;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+  pointer-events: none; /* Let clicks pass through if it covers something important */
+}
+
+.attribution:hover {
+  opacity: 1;
+}
+
+.author-name {
+  color: var(--c-primary);
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  .attribution {
+    font-size: 0.65rem;
+    bottom: 0.25rem;
+    right: 0.5rem;
+  }
+}
+/* Special Summer Practice Card (Moved to end for precedence) */
+.course-card.summer-practice {
+  border: 2px dashed var(--c-primary) !important;
+  background: rgba(37, 99, 235, 0.05) !important;
+}
+
+.course-card.summer-practice .course-id {
+  background: var(--c-primary) !important;
+  color: #000 !important;
+}
