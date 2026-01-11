@@ -47,7 +47,7 @@ window.registerDepartment("ME", {
       { id: "ME352", name: "System Dynamics", credits: 4, prereqs: ["ME244", "MATH241"], term: 6 },
       { id: "ME324", name: "Heat Transfer", credits: 4, prereqs: ["ME333"], term: 6 },
       { id: "FEXX2", name: "Free Elective", credits: 3, prereqs: [], term: 6 },
-      { id: "ME400", name: "Summer Practice", credits: 0, prereqs: [], term: 6 },
+      { id: "ME400", name: "Summer Practice", credits: 0, prereqs: ["100 Credits"], term: 6 },
     
       // SENIOR - TERM 7
       { id: "REXX7", name: "Restricted Elective", credits: 3, prereqs: [], term: 7 },

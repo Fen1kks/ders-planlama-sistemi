@@ -85,10 +85,10 @@ function loadDepartment(code) {
     // Update Title
     deptTitle.textContent = `Department of ${deptData.name}`;
 
-    // Clean Data (Filter unknown prereqs - Scoped to this dept)
+    // Clean Data (Filter unknown prereqs - Scoped to this dept + Allow Credit Reqs)
     const allIds = new Set(curriculum.map((c) => c.id));
     curriculum.forEach((c) => {
-      c.prereqs = c.prereqs.filter((p) => allIds.has(p));
+      c.prereqs = c.prereqs.filter((p) => allIds.has(p) || /^\d+\s+Credits?$/i.test(p));
     });
 
     // Load State for this Department
@@ -195,12 +195,20 @@ function getCourse(id) {
   return curriculum.find((c) => c.id === id);
 }
 
-function isLocked(courseId, checkCoreqs = true) {
+function isLocked(courseId, checkCoreqs = true, ignoreCreditLimit = false) {
   const course = getCourse(courseId);
   if (!course) return false;
 
   // 1. Check Own Prereqs
   const ownLocked = course.prereqs.some((pId) => {
+    // Check for Credit Requirement (e.g. "100 Credits")
+    const creditMatch = pId.match(/^(\d+)\s+Credits?$/i);
+    if (creditMatch) {
+        if (ignoreCreditLimit) return false; // Ignore during calculation phase
+        const required = parseInt(creditMatch[1], 10);
+        return (window.currentTotalCredits || 0) < required;
+    }
+
     const pState = state[pId];
     return !pState || !pState.completed || pState.grade === "FF";
   });
@@ -211,7 +219,7 @@ function isLocked(courseId, checkCoreqs = true) {
   if (checkCoreqs && course.coreqs && course.coreqs.length > 0) {
       const coreqLocked = course.coreqs.some(coreqId => {
           // Call Recursively but disable further coreq checks to avoid infinite loop
-          return isLocked(coreqId, false);
+          return isLocked(coreqId, false, ignoreCreditLimit);
       });
       if (coreqLocked) return true;
   }
@@ -227,7 +235,8 @@ function calculateMetrics() {
   Object.keys(state).forEach((id) => {
     const s = state[id];
     const course = getCourse(id);
-    if (course && s.completed && !isLocked(id)) {
+    // Ignore Credit Limit when summing up credits to avoid cyclical dependency
+    if (course && s.completed && !isLocked(id, true, true)) {
       if (s.grade !== "FF") {
         earnedCredits += course.credits;
       }
@@ -260,6 +269,9 @@ function calculateMetrics() {
    5. DOM RENDERING (GRID & CARDS)
    ========================================================================= */
 function render() {
+  // Pre-calculate metrics so global credits state is fresh for isLocked() checks during rendering
+  calculateMetrics();
+
   grid.innerHTML = "";
   
   // Re-inject the SVG container into the grid
@@ -335,13 +347,32 @@ function createCard(course) {
   
   // Interactive Logic
   if (locked) {
-    card.style.cursor = "pointer";
-    card.onclick = (e) => {
-      if (!e.target.closest("select")) {
-        highlightDependencies();
-        setTimeout(() => resetHighlights(), 2000);
-      }
-    };
+      card.style.cursor = "pointer";
+      // Intelligent Click Handler: Show why it's locked
+      card.onclick = () => {
+          // 1. Check for Credit Lock
+          const creditReq = course.prereqs.find(p => p.match(/^\d+\s+Credits?$/i));
+          if (creditReq) {
+              const req = parseInt(creditReq.match(/\d+/)[0], 10);
+              if ((window.currentTotalCredits || 0) < req) {
+                  const creditsEl = document.getElementById("total-credits");
+                  const originalText = creditsEl.textContent;
+                  creditsEl.textContent = `Need ${req}!`;
+                  creditsEl.style.color = "var(--hue-danger)";
+                  creditsEl.style.fontWeight = "bold";
+                  
+                  setTimeout(() => {
+                      creditsEl.textContent = originalText;
+                      creditsEl.style.color = ""; 
+                      creditsEl.style.fontWeight = "";
+                  }, 1500);
+                  return; 
+              }
+          }
+          
+          // 2. Default: Highlight missing prerequisites
+          highlightDependencies(course.id);
+      };
   } else {
     card.style.cursor = "default";
     card.onclick = null;
@@ -391,25 +422,6 @@ function createCard(course) {
     const isChecked = e.target.checked;
     
     if (isChecked) {
-        // Special Logic for Summer Practice (ISE400, ME400): Requires 100 Credits
-        if (['ISE400', 'ME400'].includes(course.id) && (window.currentTotalCredits || 0) < 100) {
-            e.target.checked = false;
-            
-            // Visual Feedback
-            const originalText = creditsEl.textContent;
-            creditsEl.textContent = "Need 100!";
-            creditsEl.style.color = "var(--hue-danger)";
-            creditsEl.style.fontWeight = "bold";
-            
-            setTimeout(() => {
-                creditsEl.textContent = originalText;
-                creditsEl.style.color = ""; 
-                creditsEl.style.fontWeight = "";
-            }, 1500);
-            
-            return;
-        }
-
         const currentGrade = state[course.id] ? state[course.id].grade : "";
         
         if (!currentGrade || currentGrade === "") {
@@ -1012,8 +1024,8 @@ window.addEventListener("resize", () => {
 // START
 // Initialize the system once all scripts are loaded
 window.addEventListener('load', () => {
-    initSystem();
-    setTimeout(() => {
-        calculateOptimalZoom();
-    }, 200);
+    
+  setTimeout(() => {
+    calculateOptimalZoom();
+  }, 50);
 });
