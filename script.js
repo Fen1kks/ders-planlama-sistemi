@@ -175,8 +175,7 @@ function cascadeUncheck(courseId) {
 /* =========================================================================
    3. THEME MANAGEMENT
    ========================================================================= */
-// Initialization
-// Initialization
+
 const savedTheme = localStorage.getItem("theme");
 const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 
@@ -187,8 +186,9 @@ if (savedTheme === "dark" || (!savedTheme && systemPrefersDark)) {
     updateThemeIcon(false);
 }
 
-if (themeToggle) {
-    themeToggle.addEventListener("click", () => {
+const themeToggles = document.querySelectorAll(".theme-toggle");
+themeToggles.forEach(btn => {
+    btn.addEventListener("click", () => {
       const isDark = document.documentElement.getAttribute("data-theme") === "dark";
       if (isDark) {
         document.documentElement.removeAttribute("data-theme");
@@ -201,18 +201,35 @@ if (themeToggle) {
       }
       scheduleDrawArrows();
     });
-}
+});
 
 function updateThemeIcon(isDark) {
-  if (!sunIcon || !moonIcon) return;
+  // Update ALL sun/moon icons
+  const sunIcons = document.querySelectorAll(".sun-icon");
+  const moonIcons = document.querySelectorAll(".moon-icon");
+  
   if (isDark) {
-    sunIcon.style.display = "none";
-    moonIcon.style.display = "block";
+    sunIcons.forEach(i => i.style.display = "none");
+    moonIcons.forEach(i => i.style.display = "block");
   } else {
-    sunIcon.style.display = "block";
-    moonIcon.style.display = "none";
+    sunIcons.forEach(i => i.style.display = "block");
+    moonIcons.forEach(i => i.style.display = "none");
   }
 }
+
+// 3. Bind Reset Buttons (Desktop & Mobile)
+const resetBtns = document.querySelectorAll(".reset-btn");
+resetBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+        if (confirm("Are you sure you want to reset all grades and progress?")) {
+            state = {};
+            saveState();
+            render();
+            // Force reload to clear visual artifacts
+            location.reload(); 
+        }
+    });
+});
 
 
 /* =========================================================================
@@ -227,7 +244,6 @@ function isLocked(courseId, checkCoreqs = true, ignoreCreditLimit = false) {
   const course = getCourse(courseId);
   if (!course) return false;
 
-  // 1. Check Own Prereqs
   // 1. Check Own Prereqs
   const ownLocked = course.prereqs.some((pString) => {
     // Check for Credit Requirement (e.g. "100 Credits")
@@ -435,12 +451,12 @@ function createCard(course) {
   }
 
   // Interactive Logic
+  // Interactive Logic
   if (locked) {
       card.style.cursor = "pointer";
-      card.onclick = () => highlightDependencies(course.id);
+      // onclick removed in favor of addEventListener below
   } else {
     card.style.cursor = "default";
-    card.onclick = null;
   }
 
   const selectStyle = `color: ${
@@ -526,17 +542,17 @@ function createCard(course) {
   });
 
   function resetHighlights() {
+    window.activeHighlightCardId = null; 
     const allArrows = document.querySelectorAll(".arrow-path");
     const allCards = document.querySelectorAll(".course-card");
 
     allArrows.forEach(arrow => {
       const originalColor = arrow.getAttribute("data-original-color");
-      const baseOpacity = arrow.getAttribute("data-base-opacity"); // Stateless source of truth
+      const baseOpacity = arrow.getAttribute("data-base-opacity"); 
       
       if (originalColor) arrow.setAttribute("stroke", originalColor);
       if (baseOpacity) arrow.style.opacity = baseOpacity;
 
-      // DYNAMIC EXTENSION: Revert to Short Path
       if (arrow.hasAttribute("data-d-short")) {
         arrow.setAttribute("d", arrow.getAttribute("data-d-short"));
       }
@@ -544,20 +560,17 @@ function createCard(course) {
     
     allCards.forEach(card => {
       card.classList.remove("dependency-highlight");
+      card.classList.remove("highlight-source"); // Remove active source class
       card.removeAttribute("data-was-locked");
       card.style.boxShadow = ""; 
     });
   }
 
-  // Card Hover Effects (for Prereq Highlighting)
-  card.addEventListener("mouseenter", () => {
-    // Force cleanup first to prevent stuck states from rapid movement
-    resetHighlights();
+  // Helper Logic for Highlighting
+  const updateHighlights = () => {
+    resetHighlights(); 
 
     const allArrows = document.querySelectorAll(".arrow-path");
-    
-    // ... rest of logic ...
-    
     const hasConnections = Array.from(allArrows).some(arrow => 
       arrow.getAttribute("data-source") === course.id || 
       arrow.getAttribute("data-target") === course.id
@@ -586,7 +599,6 @@ function createCard(course) {
         
         arrow.style.opacity = "0.9"; 
         
-        // DYNAMIC EXTENSION: Switch to Long Path
         if (arrow.hasAttribute("data-d-long")) {
         arrow.setAttribute("d", arrow.getAttribute("data-d-long"));
         }
@@ -606,10 +618,38 @@ function createCard(course) {
         otherCard.style.boxShadow = `0 0 0 2px ${highlightColor}`;
       }
     });
+  };
+
+  // DESKTOP: Hover Effects
+  card.addEventListener("mouseenter", () => {
+    if (window.innerWidth > 900) updateHighlights();
   });
 
   card.addEventListener("mouseleave", () => {
-    resetHighlights();
+    if (window.innerWidth > 900) resetHighlights();
+  });
+
+  // MOBILE: Click Toggle
+  card.addEventListener("click", (e) => {
+    // Only engage if mobile/tablet
+    if (window.innerWidth <= 900) {
+        // Prevent interfering with controls
+        if (['INPUT', 'SELECT', 'LABEL'].includes(e.target.tagName) || 
+            e.target.closest('.checkbox-wrapper') || 
+            e.target.closest('.grade-select') || 
+            e.target.closest('.course-credits')) return;
+        
+        // Stop it from bubbling to document (if we add a doc listener later)
+        e.stopPropagation();
+
+        // Check if THIS card is already the active source
+        if (card.classList.contains("highlight-source")) {
+            resetHighlights();
+        } else {
+            updateHighlights();
+            card.classList.add("highlight-source");
+        }
+    }
   });
 
   return card;
@@ -1095,23 +1135,33 @@ function drawArrows() {
    ========================================================================= */
 
 function calculateOptimalZoom() {
-  // Mobile/Tablet: Disable zoom to rely on native scrolling and avoid coordinate shifts
-  if (window.innerWidth <= 900) {
-      grid.style.zoom = "1";
-      scheduleDrawArrows();
-      return;
-  }
-
   const viewportWidth = window.innerWidth;
-  const viewportHeight = window.innerHeight - 80;
+  // Dynamic header calculation
+  const headerHeight = document.querySelector(".stats-bar").offsetHeight || 80;
+  const viewportHeight = window.innerHeight - headerHeight;
   
+  // Reset zoom to measure real dimensions
   grid.style.zoom = "1";
   
   setTimeout(() => {
     const gridWidth = grid.scrollWidth;
     const gridHeight = grid.scrollHeight;
     
-    // Only zoom if content is larger than viewport
+    // MOBILE / TABLET LOGIC
+    if (viewportWidth <= 900) {
+        // User prefers standard layout. We will handle density via CSS.
+        grid.style.zoom = "1";
+        grid.style.transform = "";
+        grid.style.width = "";
+        
+        scheduleDrawArrows();
+        return;
+    }
+
+    // DESKTOP LOGIC (Existing)
+    grid.style.width = ""; 
+    grid.style.transform = "";
+    
     if (gridWidth <= viewportWidth && gridHeight <= viewportHeight) {
         grid.style.zoom = "1";
         scheduleDrawArrows();
@@ -1122,7 +1172,6 @@ function calculateOptimalZoom() {
     const zoomY = (viewportHeight * 0.95) / gridHeight;
     
     const optimalZoom = Math.min(zoomX, zoomY);
-    // Don't shrink too much on desktop either
     const finalZoom = Math.max(0.6, optimalZoom);
     
     grid.style.zoom = finalZoom;

@@ -69,10 +69,15 @@
 body {
   background-color: var(--c-bg);
   color: var(--c-text-main);
+  /* input-security: none; REMOVED invalid property */
   height: 100vh;
+  /* Fallback for browsers that don't support dvh */
+  height: 100dvh; 
   display: flex;
   flex-direction: column;
   overflow: hidden; /* Keep body hidden, scroll wrapper */
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
 }
 
 /* =========================================================================
@@ -82,19 +87,66 @@ body {
   background: var(--c-surface);
   padding: 1rem 2rem;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column; 
+
+  justify-content: flex-start;
+  align-items: stretch; 
+
   margin-top: 4px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   box-shadow: var(--shadow-sm);
   z-index: 10;
-  flex-shrink: 0; /* Prevent header shrinking */
+  flex-shrink: 0; 
 }
 
 /* Brand & Department Selector */
 .brand {
   display: flex;
   flex-direction: column;
+  margin-bottom: 0; 
+}
+
+/* New Stats Footer (Controls + Metrics) */
+.stats-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+@media (min-width: 901px) {
+    .stats-bar {
+        flex-direction: row; 
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .brand {
+        margin-bottom: 0;
+    }
+    
+    .stats-footer {
+        justify-content: flex-end; /* Align group to right */
+        gap: 0.75rem; 
+        width: auto; 
+        flex-grow: 1; 
+    }
+
+    .controls-group {
+        order: 1; /* Now First */
+        margin-right: 0.5rem; 
+    }
+    .metrics {
+        order: 2; /* Now Second */
+    }
+}
+
+@media (max-width: 900px) {
+    .stats-footer {
+        justify-content: space-between;
+        align-items: flex-end;
+        margin-top: 0.25rem; 
+    }
 }
 
 .department-selector {
@@ -195,7 +247,7 @@ body {
 
 .controls-group {
     display: flex;
-    gap: 0.25rem; /* Very close together */
+    gap: 0.25rem;
     align-items: center;
 }
 
@@ -260,12 +312,15 @@ body {
   flex: 1;
   display: flex;
   align-items: flex-start; 
-  justify-content: flex-start; /* Changed from center to start for scrolling */
-  overflow: auto; /* Enable scrolling */
+  justify-content: flex-start;
+  overflow: auto; 
+  -webkit-overflow-scrolling: touch; /* Valid Mobile Scroll */
   position: relative;
   background: var(--c-bg);
   padding-top: 0; 
-  width: 100%; /* Ensure full width */
+  padding-bottom: 0.5rem; /* Very minimal padding to forbid excess scroll */
+  width: 100%;
+  min-height: 0; /* Critical for nested flex scrolling */
 }
 
 .curriculum-grid {
@@ -478,6 +533,11 @@ body {
   color: white;
   font-size: 16px;
 }
+.custom-checkbox svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
 .checkbox-wrapper input:checked + .custom-checkbox {
   background: var(--grade-color, var(--c-success));
   border-color: var(--grade-color, var(--c-success));
@@ -521,6 +581,9 @@ body {
 /* =========================================================================
    7. VISUALS & ARROWS
    ========================================================================= */
+/* =========================================================================
+   7. VISUALS & ARROWS
+   ========================================================================= */
 #arrows-container {
   position: absolute;
   top: 0;
@@ -534,14 +597,15 @@ body {
 
 .arrow-path {
   fill: none;
+  stroke-width: 2px; /* Restored to 2px for Desktop */
   opacity: 0.8;
   transition: opacity 0.3s, stroke-width 0.3s;
 }
 
 .arrow-path.active {
   stroke: var(--c-primary);
-  opacity: 0.8;
-  stroke-width: 2;
+  opacity: 1; 
+  stroke-width: 3px; /* Restored to 3px for Desktop */
 }
 
 .arrow-path.locked {
@@ -549,31 +613,65 @@ body {
   stroke-dasharray: 4; 
 }
 
-/* =========================================================================
-   8. RESPONSIVE UTILITIES
-   ========================================================================= */
-/* Removed hiding arrows on mobile to allow scrolling usage */
-/* @media (max-width: 800px) { ... } */
+/* ... existing code ... */
 
 /* Tablet & Mobile Spacing Optimizations */
 @media (max-width: 900px) {
+  /* ... existing code ... */
+  
+  /* Mobile Specific Arrow Thinning */
+  .arrow-path {
+      stroke-width: 1px !important;
+  }
+  .arrow-path.active {
+      stroke-width: 2px !important;
+  }
+
   .curriculum-grid {
-    gap: 0 2rem; /* Reduce horizontal gap from 4rem to 2rem */
-    margin: 0; /* Reset vertical margin to prevent centering gap on mobile */
+    gap: 0 2.5rem; /* Increased from 1.5rem to 2.5rem for WIDE arrow lanes */
+    margin: 0; 
+    /* Force padding on the container to prevent edge touching */
+    padding-left: 2rem !important; 
+    padding-right: 2rem !important;
+    padding-bottom: 2rem;
   }
 
   .course-card + .course-card {
-    margin-top: 1rem; /* Reduce vertical gap from 2rem to 1rem */
+    margin-top: 1rem; /* Restored to 1rem for arrow space */
   }
   
   .term-column {
-    gap: 0.5rem; /* Tighter column spacing */
+    gap: 0.75rem; /* Increased from 0.25rem to push courses down slightly */
+  }
+
+  /* Compact but comfortable */
+  .course-card {
+      padding: 0.3rem; /* Reduced from 0.35rem */
+      min-height: 60px; /* Reduced from 65px */
+      gap: 0.1rem;
+  }
+  
+  .course-name {
+      font-size: 0.7rem; /* Reduced from 0.75rem */
+  }
+  
+  .course-id {
+      font-size: 0.7rem;
+  }
+  
+  .card-header {
+      margin-bottom: 0;
+  }
+
+  .checkbox-wrapper {
+      transform: scale(0.95);
   }
 
   /* Hide scrollbars on mobile/tablet for cleaner touch experience */
   .grid-wrapper {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
+    overflow: auto; /* Allow scrolling */
   }
   .grid-wrapper::-webkit-scrollbar {
     display: none;
@@ -582,37 +680,28 @@ body {
 
 @media (max-width: 600px) {
   .stats-bar {
-    padding: 2rem 1rem 0.5rem 1rem; /* Increased top padding for breathing room */
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem; /* Reduce gap between brand and metrics */
-    position: relative; /* Anchor for absolute toggle */
+    padding: 0.75rem 1rem 0.5rem 1rem; /* Reduced top padding from 1.5rem to 0.75rem */
   }
   
+  .brand {
+      margin-bottom: 0.5rem; /* Reduced gap from 1rem to 0.5rem */
+  }
+
   .brand h1 {
-    font-size: 1rem;
-    padding-right: 2rem; /* Avoid overlap with toggle */
+    font-size: 1.1rem;
+    line-height: 1.1;
   }
   
   .brand span {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
-  
-  /* Pull toggle out of flow and place top-right */
-  .theme-toggle {
-    position: absolute;
-    top: 1.8rem; /* Aligned with the text */
-    right: 1rem;
-  }
-  
+
   .metrics {
-    width: 100%;
-    justify-content: flex-end; /* Align credits and GPA together on the right */
-    gap: 1.5rem; /* Group them with space */
+    gap: 1rem; 
   }
   
   .metric-value {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
   
   .metric-label {
