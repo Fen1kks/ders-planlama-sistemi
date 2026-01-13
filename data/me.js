@@ -26,7 +26,7 @@ window.registerDepartment("ME", {
       { id: "REXX3", name: "Restricted Elective", credits: [3, 4], prereqs: [], term: 3 },
     
       // SOPHOMORE - TERM 4
-      { id: "REXX4", name: "Restricted Elective", credits: 3, prereqs: [], term: 4 },
+      { id: "REXX4", name: "Restricted Elective", credits: [3, 4], prereqs: [], term: 4 },
       { id: "ME246", name: "Strength of Materials", credits: 3, prereqs: ["ME241"], term: 4, coreqs: ["ME266"] },
       { id: "ME266", name: "Solid Lab.", credits: 2, prereqs: ["ME241"], term: 4, coreqs: ["ME246"] },
       { id: "ME244", name: "Dynamics", credits: 3, prereqs: ["ME241"], term: 4 },
