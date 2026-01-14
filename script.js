@@ -103,6 +103,12 @@ function loadDepartment(code) {
         }
     }
 
+    if (typeof gtag === 'function') {
+        gtag('event', 'view_department', {
+            'department_code': code
+        });
+    }
+
     const deptData = window.departments[code];
     curriculum = deptData.curriculum; // Shallow copy reference
     
