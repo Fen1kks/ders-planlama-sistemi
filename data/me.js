@@ -2,32 +2,17 @@
 const meRexxPool4 = [
     { id: "ES222", name: "Fund. of EE", credits: 3 },
     { id: "EE211", name: "Circuit Theory", credits: 4 }
-];
+].sort((a, b) => a.id.localeCompare(b.id));
 
 // REXX5: Econ / Management
 const meRexxPool5 = [
     { id: "ECON294", name: "Econ. for Eng.", credits: 3 },
     { id: "ES301", name: "Eng. Manage.", credits: 3 }
-];
+].sort((a, b) => a.id.localeCompare(b.id));
 
-// REXX6, 7, 8, 9, 10: Technical Electives (Huge List)
+// REXX6, 7, 8, 9, 10: Technical Electives (Interdisciplinary + ME Core)
 const meTechnicalElectives = [
-    { id: "CSE464", name: "Intro. Data Sci.", credits: 3 },
-    { id: "ES310", name: "Res. Orient. Inn.", credits: 3 },
-    { id: "ES411", name: "Vehicle Electrif.", credits: 3 },
-    { id: "ES415", name: "Smart Vehicles", credits: 3 },
-    { id: "ME458", name: "New Tech. Auto.", credits: 3 },
-    { id: "MTH424", name: "Gen. AI Models", credits: 3 },
-    { id: "EE470", name: "DL for Comp. Vis.", credits: 3 },
-    { id: "EE489", name: "Dig. Control Sys.", credits: 3 },
-    { id: "MSN484", name: "Surface Sci. Eng.", credits: 3 },
-    { id: "MTH423", name: "CV in Smart Veh.", credits: 3 },
-    { id: "CSE462", name: "Intro. to AI", credits: 3 },
-    { id: "EE468", name: "Dig. Signal Proc.", credits: 3 },
-    { id: "EE479", name: "Elec. Machinery", credits: 3 },
-    { id: "ISE437", name: "Project Mgmt.", credits: 3 },
-    { id: "ISE464", name: "Comp. Aided Mfg.", credits: 3 },
-    { id: "ME411", name: "Intro. Renew. Enr.", credits: 3 },
+    // ME Unique Technicals (Not in Common Pool)
     { id: "ME422", name: "Int. Comb. Eng.", credits: 3 },
     { id: "ME423", name: "Fund. of HVAC", credits: 3 },
     { id: "ME424", name: "HVAC Design", credits: 3 },
@@ -42,27 +27,20 @@ const meTechnicalElectives = [
     { id: "ME444", name: "Fatigue & Frac.", credits: 3 },
     { id: "ME446", name: "Mech. Composite", credits: 3 },
     { id: "ME449", name: "Appl. Solid Mech.", credits: 3 },
-    { id: "ME451", name: "Num. Ctrl. Mech.", credits: 3 },
     { id: "ME452", name: "Mechanisms & App", credits: 3 },
-    { id: "ME453", name: "Intro. Mob. Robot", credits: 3 },
-    { id: "ME455", name: "Vehicle Dyn.", credits: 3 },
-    { id: "ME456", name: "Mechatronics", credits: 3 },
-    { id: "ME457", name: "Ctrl. Sys. Dsgn.", credits: 3 },
-    { id: "ME459", name: "Robot Mechanics", credits: 3 },
-    { id: "ME462", name: "Intro. to MEMS", credits: 3 },
+    { id: "ME458", name: "New Tech. Auto.", credits: 3 },
     { id: "ME468", name: "Plast. & Forming", credits: 3 },
     { id: "ME469", name: "Nondestruc. Test", credits: 3 },
     { id: "ME477", name: "Finite Elem. Meth.", credits: 3 },
     { id: "ME478", name: "Optimization Tech.", credits: 3 },
     { id: "ME483", name: "Flight Mechanics", credits: 3 },
     { id: "ME484", name: "Automotive Eng.", credits: 3 },
-    { id: "ME485", name: "Theory of Music", credits: 3 },
-    { id: "ME490", name: "Special Topics", credits: 3 }
+    { id: "ME490", name: "Special Topics", credits: 3 },
+    { id: "ISE437", name: "Project Mgmt.", credits: 3 },
+    { id: "MSN484", name: "Surface Sci. Eng.", credits: 3 },
+    // Common Technical Electives (Interdisciplinary + Shared ME)
+    ...window.commonTechnicalElectives
 ].sort((a, b) => a.id.localeCompare(b.id));
-
-// Auto-sort other pools as well for consistency
-meRexxPool4.sort((a, b) => a.id.localeCompare(b.id));
-meRexxPool5.sort((a, b) => a.id.localeCompare(b.id));
 
 window.registerDepartment("ME", {
     name: "Mechanical Engineering",
@@ -86,7 +64,7 @@ window.registerDepartment("ME", {
       // SOPHOMORE - TERM 3
       { id: "MATH221", name: "Linear Algebra", credits: 3, prereqs: [], term: 3 },
       { id: "ME241", name: "Statics", credits: 3, prereqs: ["PHYS101"], term: 3 },
-      { id: "FEXX1", name: "Free Elective", credits: 3, prereqs: [], term: 3 },
+      { id: "FEXX1", name: "Free Elective", credits: 3, prereqs: [], term: 3, options: freeElectives },
       { id: "MATH241", name: "Diff. Equations", credits: 4, prereqs: ["MATH132"], term: 3 },
       { id: "ME211", name: "Thermo I", credits: 3, prereqs: ["MATH131", "PHYS101"], term: 3 },
       { id: "REXX3", name: "Restricted Elective", credits: 3, prereqs: [], term: 3, options: programmingPool },
@@ -112,7 +90,7 @@ window.registerDepartment("ME", {
       { id: "ME344", name: "Machine Elm. II", credits: 3, prereqs: ["ME246"], term: 6 },
       { id: "ME352", name: "System Dynamics", credits: 4, prereqs: ["ME244", "MATH241"], term: 6 },
       { id: "ME324", name: "Heat Transfer", credits: 4, prereqs: ["ME333"], term: 6 },
-      { id: "FEXX2", name: "Free Elective", credits: 3, prereqs: [], term: 6 },
+      { id: "FEXX2", name: "Free Elective", credits: 3, prereqs: [], term: 6, options: freeElectives },
       { id: "ME400", name: "Summer Practice", credits: 0, prereqs: ["ME363", { "type": "count_pattern", "pattern": "^ME3", "exclude": ["ME363"], "minCount": 5, "message": "ME3XX" }], term: 6 },
     
       // SENIOR - TERM 7
@@ -128,7 +106,7 @@ window.registerDepartment("ME", {
       { id: "REXX10", name: "Restricted Elective", credits: 3, prereqs: [], term: 8, options: meTechnicalElectives },
       { id: "ME482", name: "ME Design", credits: 3, prereqs: [], term: 8 },
       { id: "ME492", name: "Graduation Project", credits: 4, prereqs: [], term: 8 },
-      { id: "FEXX3", name: "Free Elective", credits: 3, prereqs: [], term: 8 },
+      { id: "FEXX3", name: "Free Elective", credits: 3, prereqs: [], term: 8, options: freeElectives },
       { id: "HTR302", name: "History of TR II", credits: 2, prereqs: [], term: 8 },
 
       // EXTRA COURSES - TERM 9

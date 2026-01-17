@@ -1,3 +1,31 @@
+const bmeRexxPool4 = [
+    { id: "BME372", name: "Mod. Drug Delivery", credits: 3 },
+    { id: "BME413", name: "Biomed. & Dental Mat.", credits: 3 },
+    { id: "BME414", name: "Ortho. Cements", credits: 3 }
+].sort((a, b) => a.id.localeCompare(b.id));
+
+const bmeRexxPool5 = [
+    { id: "BME372", name: "Mod. Drug Delivery", credits: 3 },
+    { id: "BME412", name: "MR Spect. Imaging", credits: 3 },
+    { id: "BME413", name: "Biomed. & Dental Mat.", credits: 3 },
+    { id: "BME414", name: "Ortho. Cements", credits: 3 },
+    { id: "BME442", name: "AI in Medicine", credits: 3 },
+    { id: "BME444", name: "MRI", credits: 3 },
+    { id: "BME462", name: "Medical Robotics", credits: 3 },
+    { id: "BME482", name: "Laser-Tissue Inter.", credits: 3 },
+    { id: "BME483", name: "Sci. of Light Therapy", credits: 3 }
+].sort((a, b) => a.id.localeCompare(b.id));
+
+const bmeTechnicalElectives = [
+    // BME Specific Technicals
+    { id: "BME473", name: "Prob. & Biostats", credits: 3 },
+    // Dept Pools
+    ...bmeRexxPool4,
+    ...bmeRexxPool5,
+    // Common Technical Electives (Deduplicated)
+    ...window.commonTechnicalElectives.filter(c => !bmeRexxPool4.some(d => d.id === c.id) && !bmeRexxPool5.some(d => d.id === c.id))
+].sort((a, b) => a.id.localeCompare(b.id));
+
 window.registerDepartment("BME", {
     name: "Biomedical Engineering",
     curriculum: [
@@ -29,7 +57,7 @@ window.registerDepartment("BME", {
       { id: "BME222", name: "EM Fields & Waves in BME", credits: 3, prereqs: ["PHYS102", "MATH132"], term: 4 },
       { id: "BME252", name: "Biomechanics", credits: 3, prereqs: [], term: 4 },
       { id: "BME262", name: "Biomaterials", credits: 3, prereqs: ["CHBE203"], term: 4 },
-      { id: "FEXX1", name: "Free Elective", credits: 3, prereqs: [], term: 4 },
+      { id: "FEXX1", name: "Free Elective", credits: 3, prereqs: [], term: 4, options: freeElectives },
       { id: "TKL202", name: "Turkish II", credits: 2, prereqs: [], term: 4, options: turkishPool2 },
 
       // JUNIOR - TERM 5
@@ -44,23 +72,23 @@ window.registerDepartment("BME", {
       { id: "BME302", name: "Biomedical Electronics II", credits: 4, prereqs: ["BME301"], term: 6 },
       { id: "BME314", name: "Biomedical Instrumentation", credits: 4, prereqs: ["BME301"], term: 6 },
       { id: "BME324", name: "BME Sensors & Transducers", credits: 3, prereqs: ["BME301"], term: 6 },
-      { id: "REXX4", name: "Restricted Elective", credits: 3, prereqs: [], term: 6 },
+      { id: "REXX4", name: "Restricted Elective", credits: 3, prereqs: [], term: 6, options: bmeRexxPool4 },
       { id: "HTR302", name: "History of TR II", credits: 2, prereqs: [], term: 6 },
 
       // SENIOR - TERM 7
       { id: "BME400", name: "Summer Practice", credits: 0, prereqs: ["BME214"], term: 7 },
       { id: "BME421", name: "Medical Imaging", credits: 3, prereqs: [], term: 7 },
       { id: "BME441", name: "Microprocessors in BME", credits: 4, prereqs: ["BME302"], term: 7 },
-      { id: "REXX5", name: "Restricted Elective", credits: 3, prereqs: [], term: 7 },
-      { id: "REXX6", name: "Restricted Elective", credits: 3, prereqs: [], term: 7 },
-      { id: "FEXX2", name: "Free Elective", credits: 3, prereqs: [], term: 7 },
+      { id: "REXX5", name: "Restricted Elective", credits: 3, prereqs: [], term: 7, options: bmeRexxPool5 },
+      { id: "REXX6", name: "Restricted Elective", credits: 3, prereqs: [], term: 7, options: bmeTechnicalElectives },
+      { id: "FEXX2", name: "Free Elective", credits: 3, prereqs: [], term: 7, options: freeElectives },
 
       // SENIOR - TERM 8
       { id: "BME492", name: "Engineering Project", credits: 3, prereqs: [], term: 8 },
-      { id: "FEXX3", name: "Free Elective", credits: 3, prereqs: [], term: 8 },
-      { id: "REXX8", name: "Restricted Elective", credits: 3, prereqs: [], term: 8 },
-      { id: "REXX7", name: "Restricted Elective", credits: 3, prereqs: [], term: 8 },
-      { id: "REXX9", name: "Restricted Elective", credits: 3, prereqs: [], term: 8 },
+      { id: "FEXX3", name: "Free Elective", credits: 3, prereqs: [], term: 8, options: freeElectives },
+      { id: "REXX8", name: "Restricted Elective", credits: 3, prereqs: [], term: 8, options: bmeTechnicalElectives },
+      { id: "REXX7", name: "Restricted Elective", credits: 3, prereqs: [], term: 8, options: bmeRexxPool5 },
+      { id: "REXX9", name: "Restricted Elective", credits: 3, prereqs: [], term: 8, options: bmeTechnicalElectives },
 
       // EXTRA COURSES - TERM 9
       { id: "EXTRA-1", name: "Extra Course 1", credits: [3, 4, 2], prereqs: [], term: 9 },

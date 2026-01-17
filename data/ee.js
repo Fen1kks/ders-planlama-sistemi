@@ -1,3 +1,36 @@
+// REXX3, 4, 5, 7, 8: Department Electives (Core EE)
+const eeDeptElectives = [
+    { id: "EE428", name: "Numerical EM", credits: 3 },
+    { id: "EE463", name: "ML Fund.", credits: 3 },
+    { id: "EE434", name: "Analog IC Design", credits: 3 },
+    { id: "EE455", name: "Radar Systems", credits: 3 },
+    { id: "EE458", name: "Wireless Comm.", credits: 3 },
+    { id: "EE459", name: "Satellite Comm.", credits: 3 },
+    { id: "EE469", name: "Image Proc.", credits: 3 },
+    { id: "EE470", name: "DL for Comp. Vision", credits: 3 },
+    { id: "EE475", name: "High Voltage Tech.", credits: 3 },
+    { id: "EE481", name: "Solar & Wind Sys.", credits: 3 },
+    { id: "EE489", name: "Digital Ctrl Sys.", credits: 3 },
+    { id: "EE421", name: "Antennas & Prop.", credits: 3 },
+    { id: "EE429", name: "Biomed. EM", credits: 3 },
+    { id: "EE432", name: "Ind. Electronics", credits: 3 },
+    { id: "EE433", name: "IC Phys. Design", credits: 3 },
+    { id: "EE439", name: "High Freq. Elec.", credits: 3 },
+    { id: "EE468", name: "DSP", credits: 3 },
+    { id: "EE473", name: "Power Electronics", credits: 3 },
+    { id: "EE477", name: "Elec. Dist. Sys.", credits: 3 },
+    { id: "EE479", name: "Elec. Machinery", credits: 3 },
+    { id: "EE487", name: "Robotics", credits: 3 }
+].sort((a, b) => a.id.localeCompare(b.id));
+
+// REXX6, 9: Technical Electives (Interdisciplinary + EE Core)
+const eeTechnicalElectives = [
+    // Include all Dept Electives
+    ...eeDeptElectives,
+    // Common Technical Electives (Deduplicated)
+    ...window.commonTechnicalElectives.filter(c => !eeDeptElectives.some(d => d.id === c.id))
+].sort((a, b) => a.id.localeCompare(b.id));
+
 window.registerDepartment("EE", {
     name: "Electrical-Electronics Engineering",
     curriculum: [
@@ -22,7 +55,7 @@ window.registerDepartment("EE", {
       { id: "ES272", name: "Numerical Analysis", credits: 3, prereqs: ["ES112", "MATH132"], term: 3 },
       { id: "EE211", name: "Circuit Theory I", credits: 4, prereqs: [], term: 3 },
       { id: "EE241", name: "Digital Circuits", credits: 4, prereqs: [], term: 3 },
-      { id: "FEXX1", name: "Free Elective", credits: 3, prereqs: [], term: 3 },
+      { id: "FEXX1", name: "Free Elective", credits: 3, prereqs: [], term: 3, options: freeElectives },
       { id: "MATH241", name: "Diff. Equations", credits: 4, prereqs: ["MATH132"], term: 3 },
       
       // SOPHOMORE - TERM 4
@@ -47,20 +80,21 @@ window.registerDepartment("EE", {
       // JUNIOR - TERM 7
       { id: "EE491", name: "Intro. to Eng. Project", credits: 3, prereqs: [], term: 7 },
       { id: "HTR301", name: "History of TR I", credits: 2, prereqs: [], term: 7 },
-      { id: "REXX3", name: "Restricted Elective", credits: 3, prereqs: [], term: 7 },
-      { id: "REXX4", name: "Restricted Elective", credits: 3, prereqs: [], term: 7 },
-      { id: "REXX5", name: "Restricted Elective", credits: 3, prereqs: [], term: 7 },
-      { id: "REXX6", name: "Restricted Elective", credits: 3, prereqs: [], term: 7 },
+      { id: "REXX3", name: "Restricted Elective", credits: 3, prereqs: [], term: 7, options: eeDeptElectives },
+      { id: "REXX4", name: "Restricted Elective", credits: 3, prereqs: [], term: 7, options: eeDeptElectives },
+      { id: "REXX5", name: "Restricted Elective", credits: 3, prereqs: [], term: 7, options: eeDeptElectives },
+      { id: "REXX6", name: "Restricted Elective", credits: 3, prereqs: [], term: 7, options: eeTechnicalElectives },
       { id: "EE400", name: "Summer Practice", credits: 0, prereqs: [], term: 7 },
       
       // JUNIOR - TERM 8
       { id: "EE492", name: "Engineering Project", credits: 3, prereqs: ["EE491"], term: 8 },
       { id: "HTR302", name: "History of TR II", credits: 2, prereqs: [], term: 8 },
-      { id: "FEXX2", name: "Free Elective", credits: 3, prereqs: [], term: 8 },
-      { id: "FEXX3", name: "Free Elective", credits: 3, prereqs: [], term: 8 },
-      { id: "REXX7", name: "Restricted Elective", credits: 3, prereqs: [], term: 8 },
-      { id: "REXX8", name: "Restricted Elective", credits: 3, prereqs: [], term: 8 },
-      { id: "REXX9", name: "Restricted Elective", credits: 3, prereqs: [], term: 8 },
+      { id: "FEXX2", name: "Free Elective", credits: 3, prereqs: [], term: 8, options: freeElectives },
+      { id: "FEXX3", name: "Free Elective", credits: 3, prereqs: [], term: 8, options: freeElectives },
+      { id: "REXX7", name: "Restricted Elective", credits: 3, prereqs: [], term: 8, options: eeDeptElectives },
+      { id: "REXX8", name: "Restricted Elective", credits: 3, prereqs: [], term: 8, options: eeDeptElectives },
+      { id: "REXX9", name: "Restricted Elective", credits: 3, prereqs: [], term: 8, options: eeTechnicalElectives },
+
 
       // EXTRA COURSES - TERM 9
       { id: "EXTRA-1", name: "Extra Course 1", credits: [3, 4, 2], prereqs: [], term: 9 },

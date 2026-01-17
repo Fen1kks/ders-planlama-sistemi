@@ -1,3 +1,24 @@
+// REXX5: Management / Economics
+const cseRexxPool5 = [
+    { id: "ECON294", name: "Econ. for Eng.", credits: 3 },
+    { id: "ES272", name: "Num. Analysis", credits: 3 },
+    { id: "ES301", name: "Eng. Mgmt.", credits: 3 }
+].sort((a, b) => a.id.localeCompare(b.id));
+
+// REXX3, 4, 6, 7, 8: Technical Electives (Interdisciplinary + CSE)
+const cseTechnicalElectives = [
+    // CSE Core Courses that might also be interdisciplinary
+    { id: "CSE445", name: "Software Testing", credits: 3 },
+    { id: "CSE464", name: "Intro. Data Sci.", credits: 3 },
+    { id: "CSE480", name: "Special Topics", credits: 3 },
+    { id: "CSE424", name: "Embedded CV", credits: 3 },
+    { id: "CSE447", name: "Software Arch.", credits: 3 },
+    { id: "CSE457", name: "Compiler Design", credits: 3 },
+    { id: "CSE336", name: "OS Practice", credits: 3 },
+    // Common Technical Electives (Includes other CSE electives like 315, 326, 421...)
+    ...window.commonTechnicalElectives
+].sort((a, b) => a.id.localeCompare(b.id));
+
 window.registerDepartment("CSE", {
     name: "Computer Engineering",
     curriculum: [
@@ -40,7 +61,7 @@ window.registerDepartment("CSE", {
       { id: "HTR301", name: "History of TR I", credits: 2, prereqs: [], term: 5 },
 
       // JUNIOR - TERM 6
-      { id: "FEXX1", name: "Free Elective", credits: 3, prereqs: [], term: 6 },
+      { id: "FEXX1", name: "Free Elective", credits: 3, prereqs: [], term: 6, options: freeElectives },
       { id: "CSE344", name: "Software Engineering", credits: 3, prereqs: ["CSE211"], term: 6 },
       { id: "CSE348", name: "Database Management Sys.", credits: 3, prereqs: ["CSE211"], term: 6 },
       { id: "CSE331", name: "Operating Systems Design", credits: 4, prereqs: ["CSE211", "CSE232"], term: 6 },
@@ -49,18 +70,18 @@ window.registerDepartment("CSE", {
     
       // SENIOR - TERM 7
       { id: "CSE471", name: "Data Comm. & Comp. Net.", credits: 4, prereqs: ["CSE311"], term: 7 },
-      { id: "FEXX2", name: "Free Elective", credits: 3, prereqs: [], term: 7 },
-      { id: "REXX3", name: "Restricted Elective", credits: 3, prereqs: [], term: 7 },
-      { id: "REXX4", name: "Restricted Elective", credits: 3, prereqs: [], term: 7 },
-      { id: "REXX5", name: "Restricted Elective", credits: 3, prereqs: [], term: 7 },
+      { id: "FEXX2", name: "Free Elective", credits: 3, prereqs: [], term: 7, options: freeElectives },
+      { id: "REXX3", name: "Restricted Elective", credits: 3, prereqs: [], term: 7, options: cseTechnicalElectives },
+      { id: "REXX4", name: "Restricted Elective", credits: 3, prereqs: [], term: 7, options: cseTechnicalElectives },
+      { id: "REXX5", name: "Restricted Elective", credits: 3, prereqs: [], term: 7, options: cseRexxPool5 },
       { id: "CSE400", name: "Summer Practice", credits: 0, prereqs: [], term: 7 },
 
       // SENIOR - TERM 8
       { id: "CSE492", name: "Engineering Project", credits: 3, prereqs: [], term: 8 },
-      { id: "FEXX3", name: "Free Elective", credits: 3, prereqs: [], term: 8 },
-      { id: "REXX6", name: "Restricted Elective", credits: 3, prereqs: [], term: 8 },
-      { id: "REXX7", name: "Restricted Elective", credits: 3, prereqs: [], term: 8 },
-      { id: "REXX8", name: "Restricted Elective", credits: 3, prereqs: [], term: 8 },
+      { id: "FEXX3", name: "Free Elective", credits: 3, prereqs: [], term: 8, options: freeElectives },
+      { id: "REXX6", name: "Restricted Elective", credits: 3, prereqs: [], term: 8, options: cseTechnicalElectives },
+      { id: "REXX7", name: "Restricted Elective", credits: 3, prereqs: [], term: 8, options: cseTechnicalElectives },
+      { id: "REXX8", name: "Restricted Elective", credits: 3, prereqs: [], term: 8, options: cseTechnicalElectives },
 
       // EXTRA COURSES - TERM 9
       { id: "EXTRA-1", name: "Extra Course 1", credits: [3, 4, 2], prereqs: [], term: 9 },
