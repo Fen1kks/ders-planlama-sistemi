@@ -46,6 +46,8 @@ Ders seçim dönemlerinde hangi dersin hangisine bağlı olduğunu (prerequisite
 - **💾 LocalStorage Teknolojisi:** Üyelik gerektirmez! Tüm verileriniz sadece kendi tarayıcınızda saklanır ve sayfayı yenilediğinizde kaybolmaz.
 - **🎨 Gelişmiş Tema Sistemi:** Göz yormayan "Karanlık Mod", ferah "Aydınlık Mod" ve özel "Rose" teması seçenekleriyle kişiselleştirilebilir deneyim.
 - **🌍 Çoklu Dil Desteği:** Türkçe ve İngilizce dilleri arasında anında geçiş yapabilme imkanı. Tüm ders adları, arayüz metinleri ve uyarılar seçilen dile göre dinamik olarak güncellenir.
+- **📱 PWA Desteği:** iOS ve Android cihazlarda uygulamayı ana ekrana ekleyerek tam ekran deneyimi yaşayabilirsiniz.
+- **🔔 Gelişmiş Bildirimler:** Tarayıcı uyarıları yerine modern, engelleyici olmayan "Toast" bildirimleri.
 
 ### 🎓 Ön Koşul Sistemi
 
@@ -66,8 +68,6 @@ Ders seçim dönemlerinde hangi dersin hangisine bağlı olduğunu (prerequisite
 - **🔧 Teknik Seçmeliler:** Bölümler arası ortak teknik seçmeli havuzu (ES310, MTH424, CSE480, vb.).
 - **💡 Dinamik Kredi Sistemi:** Dersin kredisini (0, 2, 3, 4 vb.) kullanıcı seçebilir.
 - **🎯 Akıllı Filtreleme:** Her bölüm kendi özel seçmeli havuzlarını kullanır, tekrar eden dersler otomatik filtrelenir.
-- **📱 PWA Desteği:** iOS ve Android cihazlarda uygulamayı ana ekrana ekleyerek tam ekran deneyimi yaşayabilirsiniz.
-- **🔔 Gelişmiş Bildirimler:** Tarayıcı uyarıları yerine modern, engelleyici olmayan "Toast" bildirimleri.
 
 ### 🏛️ Desteklenen Bölümler
 
