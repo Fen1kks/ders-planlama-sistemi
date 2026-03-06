@@ -109,7 +109,7 @@ export const ME: Department = {
       { id: "REXX9", name: "Restricted Elective", credits: 3, prereqs: [], term: 8, options: meTechnicalElectives },
       { id: "REXX10", name: "Restricted Elective", credits: 3, prereqs: [], term: 8, options: meTechnicalElectives },
       { id: "ME482", name: "ME Design", credits: 3, prereqs: [], term: 8 },
-      { id: "ME492", name: "Graduation Project", credits: 4, prereqs: [], term: 8 },
+      { id: "ME492", name: "Graduation Project", credits: 3, prereqs: [], term: 8 },
       { id: "FEXX3", name: "Free Elective", credits: 3, prereqs: [], term: 8, options: freeElectives },
       { id: "HTR302", name: "History of TR II", credits: 2, prereqs: [], term: 8 },
 
