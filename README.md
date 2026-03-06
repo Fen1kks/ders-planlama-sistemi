@@ -106,6 +106,7 @@ src/
 ├── features/                       # Özellik modülleri
 │   ├── card.ts                     # Ders kartı etkileşimleri (tıklama, seçme, not)
 │   ├── highlights.ts               # Ön koşul vurgulama ve soluklaştırma motoru
+│   ├── info.ts                     # Uygulama bilgi modalı (Hakkında / Kullanım Kılavuzu)
 │   ├── simulation.ts               # GPA simülasyon modu mantığı
 │   ├── transcript-import.ts        # PDF transkript içe aktarma arayüzü
 │   ├── reset.ts                    # Veri sıfırlama
