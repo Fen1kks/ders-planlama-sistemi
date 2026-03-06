@@ -162,6 +162,23 @@ export function updateGlobalTranslations(currentDeptCode: string, originalDeptNa
     setText("#privacy-warning", tPopup("privacyWarning"));
     setText("#cancel-privacy-btn", tPopup("cancel"));
     setText("#confirm-privacy-btn", tPopup("selectFile"));
+
+    // Info Button Tooltip
+    const infoBtn = document.getElementById("info-btn");
+    if (infoBtn) {
+        infoBtn.title = t("info");
+        infoBtn.ariaLabel = t("info");
+    }
+
+    // Info Modal Donate Button
+    setText("#donate-btn-text", tPopup("donateBtn"));
+
+    // Footer Donate Button
+    const footerDonate = document.querySelector(".attribution .donate-btn");
+    if (footerDonate) {
+        const svg = footerDonate.querySelector("svg")?.outerHTML || "";
+        footerDonate.innerHTML = svg + "\n                " + t("footerDonate");
+    }
 }
 
 // Helper Function: Get Course name

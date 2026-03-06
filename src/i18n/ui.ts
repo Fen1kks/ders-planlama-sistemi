@@ -18,6 +18,8 @@ export const uiTranslations: Record<string, { en: string; tr: string }> = {
   coreqs: { en: "Coreqs", tr: "Eşkoşul" },
   search: { en: "Search...", tr: "Ara..." },
   appTitle: { en: "Academic Planner & GPA Forecaster", tr: "Akademik Planlayıcı & Ortalama Hesaplayıcı" },
+  info: { en: "Info", tr: "Bilgi" },
+  footerDonate: { en: "Support via ByNoGame", tr: "ByNoGame ile Destekle" },
 };
 
 // 2. Popup / Modal Metinleri
@@ -47,7 +49,8 @@ export const popupTranslations: Record<string, { en: string; tr: string }> = {
   privacyWarning: { en: "⚠️ Your current data will be cleared and replaced with transcript data.", tr: "⚠️ Yaptığınız değişiklikler silinip yerine transkript esas alınacaktır." },
   selectFile: { en: "Select File", tr: "Dosya Seç" },
   downloadTranscript: { en: "Download Transcript", tr: "Transkript İndir" },
-  recommended: { en: "Recommended", tr: "Tercih Edilen" }
+  recommended: { en: "Recommended", tr: "Tercih Edilen" },
+  donateBtn: { en: "Support with a Donation", tr: "Bağış Yaparak Destek Ol" },
 };
 
 // 3. Bölüm İsimleri Sözlüğü

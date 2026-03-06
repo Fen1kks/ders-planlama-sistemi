@@ -95,7 +95,8 @@ body {
     margin-top: 0.25rem;
   }
   
-  /* Mobile Order: Import(1), Trash(2), Lang(3), Theme(4), Sim(5) */
+  /* Mobile Order: Info(0), Import(1), Trash(2), Lang(3), Theme(4), Sim(5) */
+  .controls-group .info-btn { order: 0; }
   .controls-group .import-btn { order: 1; }
   .controls-group .reset-btn { order: 2; }
   .controls-group .lang-btn { order: 3; }
@@ -230,7 +231,8 @@ body {
 .lang-btn,
 .reset-btn,
 .sim-btn,
-.import-btn {
+.import-btn,
+.info-btn {
   background: none;
   border: none;
   cursor: pointer;
@@ -252,6 +254,7 @@ body {
   .controls-group .lang-btn { order: 3; }
   .controls-group .reset-btn { order: 4; }
   .controls-group .import-btn { order: 5; }
+  .controls-group .info-btn { order: 6; }
 }
 .theme-toggle:hover,
 .lang-btn:hover,
@@ -267,6 +270,11 @@ body {
 .import-btn:hover {
   background: rgba(34, 197, 94, 0.1) !important;
   color: #22c55e !important;
+}
+
+.info-btn:hover {
+  background: rgba(var(--c-primary-rgb), 0.1) !important;
+  color: var(--c-primary) !important;
 }
 
 .theme-toggle:hover {

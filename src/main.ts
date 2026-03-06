@@ -8,6 +8,7 @@ import { setupSimulationListeners } from './features/simulation';
 import { setupResizeListener } from './features/zoom';
 import { setupResetListeners } from './features/reset';
 import { setupTranscriptImport } from './features/transcript-import';
+import { setupInfoModal } from './features/info';
 
 const deptSelector = document.getElementById("dept-selector") as HTMLDivElement;
 const deptDropdown = document.getElementById("dept-dropdown") as HTMLDivElement;
@@ -77,6 +78,7 @@ function initSystem() {
     }
     updateGlobalTranslations(currentDept, departments[currentDept]?.name || "");
     setupTranscriptImport();
+    setupInfoModal();
 }
 
 window.addEventListener('load', initSystem);

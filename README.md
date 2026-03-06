@@ -131,9 +131,6 @@ src/
 │       ├── departments.ts          # Bölüme özel ders çevirileri
 │       └── free.ts                 # Serbest seçmeli çevirileri
 │
-├── components/                     # UI bileşenleri
-│   └── modals/                     # Modal diyaloglar
-│
 └── assets/                         # Statik kaynaklar
     └── styles/
         ├── style.css               # Ana stil dosyası

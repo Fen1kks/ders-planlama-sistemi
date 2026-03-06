@@ -130,6 +130,23 @@
               <path d="m15 15-3-3-3 3"/>
             </svg>
           </button>
+          <button
+            class="info-btn"
+            id="info-btn"
+            aria-label="Information"
+            title="Info"
+            style="display: flex; align-items: center; justify-content: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info" style="color: var(--c-primary); fill: var(--c-primary); opacity: 0.15;">
+              <circle cx="12" cy="12" r="10" style="fill: transparent; stroke: currentColor; opacity: 1;" />
+              <path d="M12 16v-4" style="stroke: currentColor; opacity: 1;" />
+              <path d="M12 8h.01" style="stroke: currentColor; opacity: 1;" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--c-primary)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-info" style="position: absolute;">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 16v-4"/>
+              <path d="M12 8h.01"/>
+            </svg>
+          </button>
         </div>
         <div class="metrics">
           <div class="metric-card">
@@ -213,11 +230,40 @@
         </div>
       </div>
     </div>
+    <!-- Info Modal -->
+    <div id="info-modal-overlay" class="theme-modal-overlay">
+        <div class="theme-modal" style="max-width: 600px; width: 90%;">
+            <div class="theme-modal-header">
+                <h3 id="info-modal-title" style="flex: 1; text-align: center; margin-left: 2rem;">
+                  How to Use?
+                </h3>
+                <button class="close-btn" id="close-info-modal-btn" style="position: relative; right: 0;">
+                  ✕
+                </button>
+            </div>
+            <div id="info-modal-content" style="color: var(--c-text-main); margin-bottom: 1.5rem; max-height: 65vh; overflow-y: auto; padding-right: 0.5rem; line-height: 1.6; font-size: 0.95rem;">
+            </div>
+            <div class="modal-actions" style="justify-content: center; margin-top: 1rem;">
+                <a href="https://donate.bynogame.com/fen1kks" target="_blank" style="text-decoration: none;">
+                    <button class="modal-btn confirm" id="confirm-info-btn" style="width: auto; padding: 0.5rem 1.5rem; display: flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); border: none;">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                        <span id="donate-btn-text">
+                          Support with a Donation
+                        </span>
+                    </button>
+                </a>
+            </div>
+        </div>
+    </div>
     <!-- Simulation Input Modal -->
     <div id="sim-modal-overlay" class="theme-modal-overlay">
         <div class="theme-modal">
             <div class="theme-modal-header">
-                <h3>Simulation Setup</h3>
+                <h3>
+                  Simulation Setup
+                </h3>
                 <button class="close-btn" id="close-sim-modal-btn">✕</button>
             </div>
             <div style="display: flex; flex-direction: column; gap: 1rem; color: var(--c-text-main);">
@@ -234,7 +280,9 @@
                 <button class="modal-btn cancel" id="cancel-sim-btn">Cancel</button>
                 <div style="display: flex; gap: 0.5rem;">
                     <button class="modal-btn" id="manual-sim-btn" style="border: 1px solid var(--c-primary); color: var(--c-primary); background: transparent;">Manual Mode</button>
-                    <button class="modal-btn confirm" id="start-sim-btn" style="background: #8b5cf6;">Auto-Fill</button>
+                    <button class="modal-btn confirm" id="start-sim-btn" style="background: #8b5cf6;">
+                      Auto-Fill
+                    </button>
                 </div>
             </div>
         </div>
@@ -243,7 +291,9 @@
     <div id="theme-modal-overlay" class="theme-modal-overlay">
         <div class="theme-modal">
             <div class="theme-modal-header">
-                <h3>Select Theme</h3>
+                <h3>
+                  Select Theme
+                </h3>
                 <button class="close-btn" id="close-theme-modal-btn">✕</button>
             </div>
             <div class="theme-grid">
@@ -253,7 +303,9 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41-1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
                         </div>
                     </div>
-                    <span>Light</span>
+                    <span>
+                      Light
+                    </span>
                 </div>
                 <div class="theme-option" data-value="dark">
                     <div class="theme-preview" style="background: #1a1b26; border: 2px solid #414868;">
@@ -269,7 +321,9 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
                         </div>
                     </div>
-                    <span>Rose</span>
+                    <span>
+                      Rose
+                    </span>
                 </div>
             </div>
         </div>
@@ -282,7 +336,7 @@
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                 </svg>
-                ByNoGame ile Destekle
+                Support via ByNoGame
             </div>
         </a>
     </div>
